@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Portal | Anumati</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="logo-area"><span class="brand-name">ANUMATI</span></div>
+        <button onclick="logout()" style="background:none; border:none; color: #666; cursor:pointer; font-weight:600;">LOGOUT</button>
+    </header>
+
+
+    <main class="main-wrapper">
+        <div class="nmims-card">
+            <h2>Leave Application Form</h2>
+            <form id="leaveForm">
+                <div class="flex-group">
+                    <div class="flex-item"><label>Full Name</label><input type="text" id="stuName" class="input-field" placeholder="" required></div>
+                    <div class="flex-item"><label>Roll No</label><input type="text" id="rollNo" class="input-field" required></div>
+                    <div class="flex-item"><label>Room No</label><input type="text" id="roomNo" class="input-field" required></div>
+                </div>
+
+
+                <div class="flex-group">
+                    <div class="flex-item"><label>Student Mobile</label><input type="tel" id="stuMobile" class="input-field" required></div>
+                    <div class="flex-item"><label>Parent's Mobile</label><input type="tel" id="parentMobile" class="input-field" required></div>
+                </div>
+
+
+                <label>Purpose of Visit</label><input type="text" id="reason" class="input-field" required>
+               
+                <div class="flex-group">
+                    <div class="flex-item"><label>Departure Date</label><input type="date" id="sDate" class="input-field" required></div>
+                    <div class="flex-item"><label>Arrival Date</label><input type="date" id="eDate" class="input-field" required></div>
+                </div>
+
+
+                <button type="submit" class="btn-nmims-submit">Submit Application</button>
+            </form>
+        </div>
+
+
+        <div class="nmims-card" style="margin-top:30px; border-top-color: #28a745;">
+            <h2 style="color: #28a745;">My Applications Status</h2>
+            <table class="nmims-table">
+                <thead><tr><th>Room</th><th>Reason</th><th>Parent</th><th>Warden Status</th></tr></thead>
+                <tbody id="studentStatusList"></tbody>
+            </table>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

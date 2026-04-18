@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Warden Login | SNJB</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="home-bg">
+    <header class="header">
+        <div class="logo-area">
+            <span class="nmims-text">SVKM'S</span>
+            <span class="brand-name">NMIMS</span>
+            <span class="sub-text">Deemed to be UNIVERSITY</span>
+        </div>
+    </header>
+
+    <div class="hero-section">
+        <div class="auth-card" style="background:white; padding:40px; border-radius:10px; box-shadow:0 5px 25px rgba(0,0,0,0.1); width:380px; border: 1px solid #ddd;">
+            <h2 style="color:var(--nmims-red); margin-bottom: 30px; border-bottom: 2px solid #f1f1f1; padding-bottom: 10px;">Warden / Admin Sign In</h2>
+            <form id="wardenLoginForm">
+                <div style="text-align: left; margin-bottom: 15px;">
+                    <label style="font-weight: 600; font-size: 0.9rem;">Official Admin Email</label>
+                    <input type="email" id="wEmail" placeholder="warden@nmims.edu" style="width:100%; padding:12px; margin-top:5px; border:1px solid #ccc; border-radius:4px; box-sizing: border-box;" required>
+                </div>
+                <div style="text-align: left; margin-bottom: 25px;">
+                    <label style="font-weight: 600; font-size: 0.9rem;">Admin Key</label>
+                    <input type="password" id="wPass" placeholder="••••••••" style="width:100%; padding:12px; margin-top:5px; border:1px solid #ccc; border-radius:4px; box-sizing: border-box;" required>
+                </div>
+                <button type="submit" class="btn-nmims-submit" style="width:100%; border: none;">Authorize Login</button>
+            </form>
+            <div style="margin-top: 20px;">
+                <a href="index.html" style="text-decoration:none; color:#666; font-size: 0.85rem;">← Back to Role Selection</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('wardenLoginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const pass = document.getElementById('wPass').value;
+            
+            if(pass === "123") {
+                localStorage.setItem('currentUser', 'warden');
+                window.location.href = "warden.html"; // Redirect to warden dashboard
+            } else {
+                alert("Admin Access Denied!");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Portal | Anumati</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body style="background: #f4f7f6; margin: 0;">
+
+    <header class="header">
+        <div class="logo-area">
+            <span class="brand-name">ANUMATI PARENT PORTAL</span>
+        </div>
+        <button onclick="logout()" class="btn-nmims-submit" style="width: auto; padding: 8px 20px;">Logout</button>
+    </header>
+
+    <div class="dashboard-container">
+        <div class="welcome-banner" style="background: #fff; padding: 20px; border-left: 5px solid var(--nmims-red); margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+            <h1 style="margin: 0; font-size: 1.8rem; color: #333;">Applications for Approval</h1>
+            <p style="color: #666; margin-top: 5px;">Review and authorize your ward's leave requests.</p>
+        </div>
+
+        <div class="nmims-table-card">
+            <table class="nmims-table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Reason for Leave</th>
+                        <th>Duration / Dates</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="parentList">
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 30px; color: #999;">
+                            Loading applications...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
