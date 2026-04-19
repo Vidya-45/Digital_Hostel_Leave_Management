@@ -1,56 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Portal | Anumati</title>
+    <meta name="description" content="Student dashboard for submitting and tracking hostel leave applications.">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <header class="header">
-        <div class="logo-area"><span class="brand-name">ANUMATI</span></div>
-        <button onclick="logout()" style="background:none; border:none; color: #666; cursor:pointer; font-weight:600;">LOGOUT</button>
+        <div class="logo-area">
+            <span class="nmims-text">SNJB'S</span>
+            <span class="brand-name">ANUMATI</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:20px;">
+            <span style="color:#ffdddd; font-size:0.88rem; font-weight:600;">
+                <i class="fas fa-user-graduate" style="margin-right:5px;"></i>Student Portal
+            </span>
+            <button onclick="logout('student')" class="btn-nmims-submit"
+                style="width:auto; padding:8px 20px; margin:0; border:none; background:rgba(255,255,255,0.15);">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
     </header>
 
-
     <main class="main-wrapper">
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <h1><i class="fas fa-file-alt" style="color:var(--maroon); margin-right:10px;"></i>Leave Application</h1>
+            <p>Fill in all fields below to submit a leave request. Your parent will receive a notification via mobile.
+            </p>
+        </div>
+
+        <!-- Leave Application Form -->
         <div class="nmims-card">
-            <h2>Leave Application Form</h2>
+            <h2>Application Form</h2>
             <form id="leaveForm">
                 <div class="flex-group">
-                    <div class="flex-item"><label>Full Name</label><input type="text" id="stuName" class="input-field" placeholder="" required></div>
-                    <div class="flex-item"><label>Roll No</label><input type="text" id="rollNo" class="input-field" required></div>
-                    <div class="flex-item"><label>Room No</label><input type="text" id="roomNo" class="input-field" required></div>
+                    <div class="flex-item">
+                        <label for="stuName">Full Name</label>
+                        <input type="text" id="stuName" class="input-field" placeholder="e.g. Rohit Sharma" required>
+                    </div>
+                    <div class="flex-item">
+                        <label for="rollNo">Roll No</label>
+                        <input type="text" id="rollNo" class="input-field" placeholder="e.g. 2101" required>
+                    </div>
+                    <div class="flex-item">
+                        <label for="roomNo">Room No</label>
+                        <input type="text" id="roomNo" class="input-field" placeholder="e.g. A-204" required>
+                    </div>
                 </div>
-
 
                 <div class="flex-group">
-                    <div class="flex-item"><label>Student Mobile</label><input type="tel" id="stuMobile" class="input-field" required></div>
-                    <div class="flex-item"><label>Parent's Mobile</label><input type="tel" id="parentMobile" class="input-field" required></div>
+                    <div class="flex-item">
+                        <label for="stuMobile">Student Mobile</label>
+                        <input type="tel" id="stuMobile" class="input-field" placeholder="e.g. 9876543210" required>
+                    </div>
+                    <div class="flex-item">
+                        <label for="parentMobile">
+                            Parent's Mobile
+                            <span style="color:#888; font-weight:400; font-size:0.8rem;"> (must match parent
+                                account)</span>
+                        </label>
+                        <input type="tel" id="parentMobile" class="input-field" placeholder="e.g. 9999988888" required>
+                    </div>
                 </div>
 
+                <div style="margin-bottom:15px;">
+                    <label for="reason">Purpose of Visit / Reason</label>
+                    <input type="text" id="reason" class="input-field"
+                        placeholder="e.g. Family function, Medical appointment..." required>
+                </div>
 
-                <label>Purpose of Visit</label><input type="text" id="reason" class="input-field" required>
-               
                 <div class="flex-group">
-                    <div class="flex-item"><label>Departure Date</label><input type="date" id="sDate" class="input-field" required></div>
-                    <div class="flex-item"><label>Arrival Date</label><input type="date" id="eDate" class="input-field" required></div>
+                    <div class="flex-item">
+                        <label for="sDate">Departure Date</label>
+                        <input type="date" id="sDate" class="input-field" required>
+                    </div>
+                    <div class="flex-item">
+                        <label for="eDate">Expected Return Date</label>
+                        <input type="date" id="eDate" class="input-field" required>
+                    </div>
                 </div>
 
-
-                <button type="submit" class="btn-nmims-submit">Submit Application</button>
+                <p id="formError" class="error-msg"></p>
+                <button type="submit" id="submitBtn" class="btn-nmims-submit" style="border:none;">
+                    <i class="fas fa-paper-plane" style="margin-right:8px;"></i>Submit Application
+                </button>
             </form>
         </div>
 
-
-        <div class="nmims-card" style="margin-top:30px; border-top-color: #28a745;">
-            <h2 style="color: #28a745;">My Applications Status</h2>
+        <!-- My Applications Status -->
+        <div class="nmims-card" style="border-top-color: #28a745;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h2 style="color:#28a745; border:none; padding:0; margin:0;">My Applications</h2>
+                <button onclick="loadMyLeaves()"
+                    style="background:none; border:1px solid #28a745; color:#28a745; padding:6px 14px; border-radius:6px; cursor:pointer; font-size:0.82rem; font-weight:700;">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
             <table class="nmims-table">
-                <thead><tr><th>Room</th><th>Reason</th><th>Parent</th><th>Warden Status</th></tr></thead>
-                <tbody id="studentStatusList"></tbody>
+                <thead>
+                    <tr>
+                        <th>Room</th>
+                        <th>Reason</th>
+                        <th>Dates</th>
+                        <th>Parent</th>
+                        <th>Warden</th>
+                    </tr>
+                </thead>
+                <tbody id="studentStatusList">
+                    <tr>
+                        <td colspan="5" class="page-loading">
+                            <div class="big-spinner"></div>
+                            <span>Loading applications...</span>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </main>
-    <script src="script.js"></script>
+
+    <script src="api.js"></script>
+    <script>
+        // ── Auth Guard ─────────────────────────────────────────────────────────
+        redirectIfNotLoggedIn('student');
+
+        // ── Load my leaves on page load ────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', loadMyLeaves);
+
+        // ── Form submission ────────────────────────────────────────────────────
+        document.getElementById('leaveForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+
+            const departureDateVal = document.getElementById('sDate').value;
+            const arrivalDateVal = document.getElementById('eDate').value;
+
+            if (arrivalDateVal < departureDateVal) {
+                setError('formError', 'Return date cannot be before departure date.');
+                return;
+            }
+
+            setError('formError', '');
+            setButtonLoading(btn, true, 'Submit Application');
+
+            const payload = {
+                stu_name: document.getElementById('stuName').value.trim(),
+                roll_no: document.getElementById('rollNo').value.trim(),
+                room_no: document.getElementById('roomNo').value.trim(),
+                stu_mobile: document.getElementById('stuMobile').value.trim(),
+                parent_mobile: document.getElementById('parentMobile').value.trim(),
+                reason: document.getElementById('reason').value.trim(),
+                departure_date: departureDateVal,
+                arrival_date: arrivalDateVal,
+            };
+
+            try {
+                await apiRequest('POST', '/student/leave', payload, getUserId('student'));
+                showToast('Leave application submitted successfully! ✅', 'success');
+                e.target.reset();
+                loadMyLeaves();
+            } catch (err) {
+                if (err.message.includes('401') || err.message.toLowerCase().includes('unauthorized')) {
+                    showToast('Session expired. Please log in again.', 'error');
+                    setTimeout(() => logout('student'), 1500);
+                } else {
+                    setError('formError', err.message || 'Failed to submit application. Try again.');
+                }
+            } finally {
+                setButtonLoading(btn, false, 'Submit Application');
+                btn.innerHTML = '<i class="fas fa-paper-plane" style="margin-right:8px;"></i>Submit Application';
+            }
+        });
+
+        // ── Load and render student's leave applications ────────────────────────
+        async function loadMyLeaves() {
+            const tbody = document.getElementById('studentStatusList');
+            tbody.innerHTML = `<tr><td colspan="5" class="page-loading"><div class="big-spinner"></div><span>Loading...</span></td></tr>`;
+
+            try {
+                const leaves = await apiRequest('GET', '/student/leaves', null, getUserId('student'));
+
+                if (leaves.length === 0) {
+                    tbody.innerHTML = `
+                        <tr><td colspan="5">
+                            <div class="empty-state">
+                                <span class="empty-icon">📋</span>
+                                <p>No leave applications yet. Submit your first request above.</p>
+                            </div>
+                        </td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = leaves.map(l => {
+                    const parentBadge = l.parent_status === 'Approved'
+                        ? '<span class="status-badge badge-approved">Approved</span>'
+                        : '<span class="status-badge badge-pending">Pending</span>';
+
+                    const wardenBadge = l.warden_status === 'Issued'
+                        ? '<span class="status-badge badge-issued">Gatepass Issued</span>'
+                        : '<span class="status-badge badge-pending">Pending</span>';
+
+                    return `
+                        <tr>
+                            <td><strong>${l.room_no}</strong></td>
+                            <td>${l.reason}</td>
+                            <td style="white-space:nowrap;">
+                                <i class="fas fa-calendar-alt" style="color:#888; margin-right:4px;"></i>
+                                ${l.departure_date} → ${l.arrival_date}
+                            </td>
+                            <td>${parentBadge}</td>
+                            <td>${wardenBadge}</td>
+                        </tr>`;
+                }).join('');
+
+            } catch (err) {
+                if (err.message.includes('401') || err.message.toLowerCase().includes('unauthorized')) {
+                    logout('student');
+                }
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#c0392b; padding:20px;">
+                    <i class="fas fa-exclamation-circle"></i> Failed to load applications. 
+                    <a href="#" onclick="loadMyLeaves()">Retry</a>
+                </td></tr>`;
+            }
+        }
+    </script>
 </body>
+
 </html>

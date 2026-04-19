@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | SNJB Anumati</title>
+    <meta name="description"
+        content="Register as a Student, Parent, or Warden on SNJB's Anumati Hostel Leave Management system.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── Registration-specific styles ───────────────────────────────── */
+        .reg-page-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reg-hero {
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 40px 20px 60px;
+            background: linear-gradient(160deg, #fff5f5 0%, #ffffff 60%);
+        }
+
+        .reg-container {
+            width: 100%;
+            max-width: 680px;
+        }
+
+        /* Role Tabs */
+        .reg-tabs {
+            display: flex;
+            background: #f4f4f4;
+            border-radius: 12px;
+            padding: 5px;
+            gap: 4px;
+            margin-bottom: 28px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .reg-tab-btn {
+            flex: 1;
+            padding: 11px 8px;
+            border: none;
+            background: transparent;
+            border-radius: 9px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #777;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            transition: background 0.22s, color 0.22s, box-shadow 0.22s;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .reg-tab-btn.active {
+            background: var(--maroon);
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(128, 0, 0, 0.22);
+        }
+
+        .reg-tab-btn:not(.active):hover {
+            background: #ffe4e4;
+            color: var(--maroon);
+        }
+
+        /* Form Card */
+        .reg-card {
+            background: white;
+            padding: 38px 40px;
+            border-radius: 14px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.10);
+            border-top: 5px solid var(--maroon);
+            animation: fadeInUp 0.35s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reg-card h2 {
+            color: var(--maroon);
+            margin: 0 0 6px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .reg-card .subtitle {
+            color: #888;
+            font-size: 0.86rem;
+            margin: 0 0 26px;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 18px;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .field-group {
+            margin-bottom: 18px;
+        }
+
+        .field-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: #444;
+            margin-bottom: 6px;
+        }
+
+        .field-group .input-field {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 0.97rem;
+            box-sizing: border-box;
+            transition: 0.25s;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .field-group .input-field:focus {
+            border-color: var(--maroon);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.08);
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 520px) {
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+
+            .reg-card {
+                padding: 28px 20px;
+            }
+        }
+
+        /* Password strength hint */
+        .pwd-hint {
+            font-size: 0.78rem;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        /* Info note */
+        .info-note {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            border-radius: 5px;
+            padding: 10px 14px;
+            font-size: 0.83rem;
+            color: #7a5f00;
+            margin-bottom: 20px;
+        }
+
+        .info-note i {
+            margin-right: 6px;
+        }
+
+        /* Submit button */
+        .btn-register {
+            background: var(--maroon);
+            color: white;
+            border: none;
+            padding: 13px 25px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: 0.3s;
+            margin-top: 6px;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        .btn-register:hover {
+            background: #a00000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(128, 0, 0, 0.22);
+        }
+
+        .btn-register:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Login redirect link */
+        .login-redirect {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 0.86rem;
+            color: #777;
+        }
+
+        .login-redirect a {
+            color: var(--maroon);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .login-redirect a:hover {
+            text-decoration: underline;
+        }
+
+        /* Success state */
+        .success-box {
+            display: none;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .success-box .success-icon {
+            font-size: 3.5rem;
+            color: #28a745;
+            margin-bottom: 14px;
+        }
+
+        .success-box h3 {
+            color: #222;
+            margin: 0 0 8px;
+        }
+
+        .success-box p {
+            color: #666;
+            font-size: 0.9rem;
+            margin: 0 0 20px;
+        }
+
+        .btn-go-login {
+            display: inline-block;
+            padding: 11px 30px;
+            background: var(--maroon);
+            color: white;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .btn-go-login:hover {
+            background: #a00000;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body class="home-bg reg-page-wrapper">
+
+    <!-- ── Header ─────────────────────────────────────────────────────── -->
+    <header class="header">
+        <div class="logo-area">
+            <span class="nmims-text">SNJB'S</span>
+            <span class="brand-name">ANUMATI Hostel Management</span>
+        </div>
+        <div class="top-nav">
+            <a href="registration.html"><i class="fas fa-user-plus"></i> Register</a>
+            <a href="about.html"><i class="fas fa-info-circle"></i> About</a>
+            <a href="contact.html"><i class="fas fa-phone-alt"></i> Contact</a>
+            <a href="rules.html"><i class="fas fa-list-ol"></i> Rules</a>
+        </div>
+    </header>
+
+    <!-- ── Main Content ───────────────────────────────────────────────── -->
+    <div class="reg-hero">
+        <div class="reg-container">
+
+            <!-- Page title -->
+            <div style="text-align:center; margin-bottom:28px;">
+                <h1 style="font-size:2rem; color:var(--maroon); margin:0 0 6px; font-weight:800;">
+                    <i class="fas fa-user-plus" style="margin-right:10px;"></i>Create Account
+                </h1>
+                <p style="color:#777; font-size:0.92rem; margin:0;">
+                    Choose your role and fill in your details to get started.
+                </p>
+            </div>
+
+            <!-- Role Tabs -->
+            <div class="reg-tabs" role="tablist" aria-label="Select registration role">
+                <button class="reg-tab-btn active" id="tab-student" role="tab" aria-selected="true"
+                    onclick="switchTab('student')">
+                    <i class="fas fa-user-graduate"></i> Student
+                </button>
+                <button class="reg-tab-btn" id="tab-parent" role="tab" aria-selected="false"
+                    onclick="switchTab('parent')">
+                    <i class="fas fa-users"></i> Parent
+                </button>
+                <button class="reg-tab-btn" id="tab-warden" role="tab" aria-selected="false"
+                    onclick="switchTab('warden')">
+                    <i class="fas fa-user-shield"></i> Warden
+                </button>
+            </div>
+
+            <!-- Form Card -->
+            <div class="reg-card">
+
+                <!-- ── STUDENT FORM ─────────────────────────────────── -->
+                <div class="form-section active" id="section-student">
+                    <h2><i class="fas fa-user-graduate"></i> Student Registration</h2>
+                    <p class="subtitle">Register with your college email to apply for hostel leaves.</p>
+
+                    <form id="studentRegForm" autocomplete="off" novalidate>
+                        <div class="field-group">
+                            <label for="s-email">College Email ID</label>
+                            <input type="email" id="s-email" class="input-field" placeholder="student@snjb.edu"
+                                required>
+                        </div>
+
+                        <div class="two-col">
+                            <div class="field-group">
+                                <label for="s-password">Password</label>
+                                <input type="password" id="s-password" class="input-field" placeholder="••••••••"
+                                    required minlength="6">
+                                <p class="pwd-hint">Minimum 6 characters</p>
+                            </div>
+                            <div class="field-group">
+                                <label for="s-confirm">Confirm Password</label>
+                                <input type="password" id="s-confirm" class="input-field" placeholder="••••••••"
+                                    required>
+                            </div>
+                        </div>
+
+                        <p id="studentRegError" class="error-msg"></p>
+                        <button type="submit" id="studentRegBtn" class="btn-register">
+                            <i class="fas fa-user-plus"></i> Register as Student
+                        </button>
+                    </form>
+
+                    <!-- Success state -->
+                    <div class="success-box" id="studentSuccess">
+                        <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                        <h3>Registration Successful!</h3>
+                        <p>Your student account has been created. You can now sign in.</p>
+                        <a href="student_login.html" class="btn-go-login">
+                            <i class="fas fa-sign-in-alt"></i> Go to Student Login
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ── PARENT FORM ──────────────────────────────────── -->
+                <div class="form-section" id="section-parent">
+                    <h2><i class="fas fa-users"></i> Parent Registration</h2>
+                    <p class="subtitle">Register with the mobile number you share with your child's hostel record.</p>
+
+                    <div class="info-note">
+                        <i class="fas fa-info-circle"></i>
+                        Your <strong>Mobile Number</strong> must match the number provided by your child when submitting
+                        leave applications. This is how leave requests are linked to your account.
+                    </div>
+
+                    <form id="parentRegForm" autocomplete="off" novalidate>
+                        <div class="field-group">
+                            <label for="p-email">Email ID</label>
+                            <input type="email" id="p-email" class="input-field" placeholder="parent@example.com"
+                                required>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="p-mobile">Mobile Number</label>
+                            <input type="tel" id="p-mobile" class="input-field" placeholder="10-digit mobile number"
+                                required pattern="[0-9]{10}" maxlength="10">
+                        </div>
+
+                        <div class="two-col">
+                            <div class="field-group">
+                                <label for="p-password">Password</label>
+                                <input type="password" id="p-password" class="input-field" placeholder="••••••••"
+                                    required minlength="6">
+                                <p class="pwd-hint">Minimum 6 characters</p>
+                            </div>
+                            <div class="field-group">
+                                <label for="p-confirm">Confirm Password</label>
+                                <input type="password" id="p-confirm" class="input-field" placeholder="••••••••"
+                                    required>
+                            </div>
+                        </div>
+
+                        <p id="parentRegError" class="error-msg"></p>
+                        <button type="submit" id="parentRegBtn" class="btn-register">
+                            <i class="fas fa-user-plus"></i> Register as Parent
+                        </button>
+                    </form>
+
+                    <div class="success-box" id="parentSuccess">
+                        <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                        <h3>Registration Successful!</h3>
+                        <p>Your parent account has been created. You can now sign in.</p>
+                        <a href="parent_login.html" class="btn-go-login">
+                            <i class="fas fa-sign-in-alt"></i> Go to Parent Login
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ── WARDEN FORM ──────────────────────────────────── -->
+                <div class="form-section" id="section-warden">
+                    <h2><i class="fas fa-user-shield"></i> Warden Registration</h2>
+                    <p class="subtitle">Register with your official hostel warden email address.</p>
+
+                    <div class="info-note">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Warden registration requires an authorized hostel email. Contact the hostel administration if
+                        you face any issues.
+                    </div>
+
+                    <form id="wardenRegForm" autocomplete="off" novalidate>
+                        <div class="field-group">
+                            <label for="w-email">Official Email ID</label>
+                            <input type="email" id="w-email" class="input-field" placeholder="warden@snjb.edu" required>
+                        </div>
+
+                        <div class="two-col">
+                            <div class="field-group">
+                                <label for="w-password">Password</label>
+                                <input type="password" id="w-password" class="input-field" placeholder="••••••••"
+                                    required minlength="6">
+                                <p class="pwd-hint">Minimum 6 characters</p>
+                            </div>
+                            <div class="field-group">
+                                <label for="w-confirm">Confirm Password</label>
+                                <input type="password" id="w-confirm" class="input-field" placeholder="••••••••"
+                                    required>
+                            </div>
+                        </div>
+
+                        <p id="wardenRegError" class="error-msg"></p>
+                        <button type="submit" id="wardenRegBtn" class="btn-register">
+                            <i class="fas fa-user-plus"></i> Register as Warden
+                        </button>
+                    </form>
+
+                    <div class="success-box" id="wardenSuccess">
+                        <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+                        <h3>Registration Successful!</h3>
+                        <p>Your warden account has been created. You can now sign in.</p>
+                        <a href="warden_login.html" class="btn-go-login">
+                            <i class="fas fa-sign-in-alt"></i> Go to Warden Login
+                        </a>
+                    </div>
+                </div>
+
+
+            </div><!-- /reg-card -->
+        </div><!-- /reg-container -->
+    </div><!-- /reg-hero -->
+
+    <script src="api.js"></script>
+    <script>
+        // ── Tab Switching ─────────────────────────────────────────────────────
+        function switchTab(role) {
+            ['student', 'parent', 'warden'].forEach(r => {
+                document.getElementById(`tab-${r}`).classList.toggle('active', r === role);
+                document.getElementById(`section-${r}`).classList.toggle('active', r === role);
+            });
+        }
+
+        // ── Shared Validation ─────────────────────────────────────────────────
+        function validatePasswords(pwd, confirm) {
+            if (pwd.length < 6) return 'Password must be at least 6 characters.';
+            if (pwd !== confirm) return 'Passwords do not match.';
+            return null;
+        }
+
+        // ── Student Registration ──────────────────────────────────────────────
+        document.getElementById('studentRegForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('studentRegBtn');
+            const email = document.getElementById('s-email').value.trim();
+            const password = document.getElementById('s-password').value;
+            const confirm = document.getElementById('s-confirm').value;
+
+            setError('studentRegError', '');
+            const pwdErr = validatePasswords(password, confirm);
+            if (pwdErr) { setError('studentRegError', pwdErr); return; }
+
+            setButtonLoading(btn, true, 'Register as Student');
+            try {
+                await apiRequest('POST', '/auth/student/register', { email, password });
+                document.getElementById('studentRegForm').style.display = 'none';
+                document.getElementById('studentSuccess').style.display = 'block';
+                showToast('Student registered successfully!', 'success');
+            } catch (err) {
+                setError('studentRegError', err.message || 'Registration failed. Please try again.');
+                setButtonLoading(btn, false, 'Register as Student');
+            }
+        });
+
+        // ── Parent Registration ───────────────────────────────────────────────
+        document.getElementById('parentRegForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('parentRegBtn');
+            const email = document.getElementById('p-email').value.trim();
+            const mobile = document.getElementById('p-mobile').value.trim();
+            const password = document.getElementById('p-password').value;
+            const confirm = document.getElementById('p-confirm').value;
+
+            setError('parentRegError', '');
+
+            if (!/^[0-9]{10}$/.test(mobile)) {
+                setError('parentRegError', 'Please enter a valid 10-digit mobile number.');
+                return;
+            }
+
+            const pwdErr = validatePasswords(password, confirm);
+            if (pwdErr) { setError('parentRegError', pwdErr); return; }
+
+            setButtonLoading(btn, true, 'Register as Parent');
+            try {
+                await apiRequest('POST', '/auth/parent/register', { email, password, mobile });
+                document.getElementById('parentRegForm').style.display = 'none';
+                document.getElementById('parentSuccess').style.display = 'block';
+                showToast('Parent registered successfully!', 'success');
+            } catch (err) {
+                setError('parentRegError', err.message || 'Registration failed. Please try again.');
+                setButtonLoading(btn, false, 'Register as Parent');
+            }
+        });
+
+        // ── Warden Registration ───────────────────────────────────────────────
+        document.getElementById('wardenRegForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('wardenRegBtn');
+            const email = document.getElementById('w-email').value.trim();
+            const password = document.getElementById('w-password').value;
+            const confirm = document.getElementById('w-confirm').value;
+
+            setError('wardenRegError', '');
+            const pwdErr = validatePasswords(password, confirm);
+            if (pwdErr) { setError('wardenRegError', pwdErr); return; }
+
+            setButtonLoading(btn, true, 'Register as Warden');
+            try {
+                await apiRequest('POST', '/auth/warden/register', { email, password });
+                document.getElementById('wardenRegForm').style.display = 'none';
+                document.getElementById('wardenSuccess').style.display = 'block';
+                showToast('Warden registered successfully!', 'success');
+            } catch (err) {
+                setError('wardenRegError', err.message || 'Registration failed. Please try again.');
+                setButtonLoading(btn, false, 'Register as Warden');
+            }
+        });
+    </script>
+</body>
+
+</html>

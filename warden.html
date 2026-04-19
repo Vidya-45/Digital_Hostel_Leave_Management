@@ -4,52 +4,174 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Warden Portal | Anumati</title>
+    <meta name="description" content="Warden dashboard for issuing digital gatepasses for approved hostel leave applications.">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body style="background-color: #f4f7f6; margin: 0;">
+<body style="background:#f4f7f6; margin:0;">
 
     <header class="header">
-        <div class="logo-area" style="display: flex; align-items: center; gap: 10px;">
-            <div class="brand-name">ANUMATI PORTAL</div>
+        <div class="logo-area" style="display:flex; align-items:center; gap:10px;">
+            <span class="nmims-text">SNJB'S</span>
+            <span class="brand-name">ANUMATI — Warden Portal</span>
         </div>
-        <div class="nav-links" style="display: flex; align-items: center; gap: 20px;">
-            <span style="font-weight: 600; color: #555;">Warden Dashboard</span>
-            <button onclick="logout()" class="btn-nmims-submit" style="width: auto; padding: 8px 20px; background: #333;">Logout</button>
+        <div style="display:flex; align-items:center; gap:20px;">
+            <span style="color:#ffdddd; font-size:0.88rem; font-weight:600;">
+                <i class="fas fa-user-shield" style="margin-right:5px;"></i>Warden Dashboard
+            </span>
+            <button onclick="logout('warden')" class="btn-nmims-submit" style="width:auto; padding:8px 20px; margin:0; border:none; background:rgba(255,255,255,0.15);">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
         </div>
     </header>
 
     <main class="main-wrapper">
-        <div class="welcome-banner" style="background: #fff; padding: 20px; border-left: 5px solid #28a745; margin-bottom: 25px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-            <h2 style="margin: 0; color: #333;">Gatepass Management</h2>
-            <p style="margin: 5px 0 0 0; color: #666; font-size: 0.9rem;">Review applications verified by parents and issue digital gatepasses.</p>
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner" style="border-left-color: #28a745;">
+            <h1><i class="fas fa-passport" style="color:#28a745; margin-right:10px;"></i>Gatepass Management</h1>
+            <p>Applications below have been verified by parents. Review and issue digital gatepasses for eligible students.</p>
         </div>
 
-        <div class="nmims-card" style="border-top-color: #28a745;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
-                <h3 style="margin: 0; color: #28a745;">Verified by Parents</h3>
-                <span style="font-size: 0.8rem; color: #888; font-weight: 600;">Status: LIVE</span>
+        <!-- Stat Cards -->
+        <div style="display:flex; gap:20px; margin-bottom:28px; flex-wrap:wrap;">
+            <div style="background:white; border-radius:10px; padding:20px 28px; flex:1; min-width:180px; box-shadow:0 2px 12px rgba(0,0,0,0.06); border-left:4px solid #ffc107;">
+                <div style="font-size:0.82rem; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.05em;">Awaiting Gatepass</div>
+                <div id="statPending" style="font-size:2.2rem; font-weight:800; color:#856404; margin-top:6px;">—</div>
             </div>
-            
+            <div style="background:white; border-radius:10px; padding:20px 28px; flex:1; min-width:180px; box-shadow:0 2px 12px rgba(0,0,0,0.06); border-left:4px solid #28a745;">
+                <div style="font-size:0.82rem; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.05em;">Status</div>
+                <div style="font-size:1rem; font-weight:700; color:#28a745; margin-top:10px;">
+                    <span class="status-badge badge-approved">LIVE</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Approved by Parent → Awaiting Warden -->
+        <div class="nmims-card" style="border-top-color: #28a745;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; border-bottom:1px solid #eee; padding-bottom:14px;">
+                <h2 style="margin:0; padding:0; border:none; color:#28a745;">
+                    <i class="fas fa-user-check" style="margin-right:8px;"></i>Verified by Parents
+                </h2>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <span id="autoRefreshNote" style="font-size:0.78rem; color:#aaa;">Auto-refreshes every 30s</span>
+                    <button onclick="loadWardenLeaves()" style="background:none; border:1px solid #28a745; color:#28a745; padding:6px 14px; border-radius:6px; cursor:pointer; font-size:0.82rem; font-weight:700;">
+                        <i class="fas fa-sync-alt"></i> Refresh Now
+                    </button>
+                </div>
+            </div>
+
             <table class="nmims-table">
                 <thead>
                     <tr>
-                        <th style="width: 40%;">Student Details</th>
-                        <th style="width: 30%;">Consent Status</th>
-                        <th style="width: 30%;">Action</th>
+                        <th style="width:25%;">Student Details</th>
+                        <th style="width:10%;">Room</th>
+                        <th style="width:20%;">Leave Dates</th>
+                        <th style="width:20%;">Reason</th>
+                        <th style="width:12%;">Parent Consent</th>
+                        <th style="width:13%;">Action</th>
                     </tr>
                 </thead>
                 <tbody id="wardenList">
                     <tr>
-                        <td colspan="3" style="text-align: center; padding: 40px; color: #999;">
-                            Checking for verified applications...
+                        <td colspan="6" class="page-loading">
+                            <div class="big-spinner"></div>
+                            <span>Checking for verified applications...</span>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+
     </main>
 
-    <script src="script.js"></script>
+    <script src="api.js"></script>
+    <script>
+        // ── Auth Guard ─────────────────────────────────────────────────────────
+        redirectIfNotLoggedIn('warden');
+
+        // ── Load on page ready + auto-refresh every 30s ────────────────────────
+        document.addEventListener('DOMContentLoaded', loadWardenLeaves);
+        setInterval(loadWardenLeaves, 30000);
+
+        // ── Issue gatepass ─────────────────────────────────────────────────────
+        async function issueGatepass(leaveId, btn) {
+            if (!confirm(`Issue gatepass for Leave #${leaveId}? This action cannot be undone.`)) return;
+
+            const originalText = btn.textContent;
+            btn.disabled = true;
+            btn.innerHTML = '<span class="btn-spinner"></span> Issuing...';
+
+            try {
+                await apiRequest('PATCH', `/warden/leaves/${leaveId}/issue`, null, getUserId('warden'));
+                showToast(`Gatepass #${leaveId} issued successfully! ✅`, 'success');
+                loadWardenLeaves(); // Refresh table
+            } catch (err) {
+                showToast(err.message || 'Failed to issue gatepass. Try again.', 'error');
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+
+        // ── Load approved (pending-warden) leaves ──────────────────────────────
+        async function loadWardenLeaves() {
+            const tbody = document.getElementById('wardenList');
+            tbody.innerHTML = `<tr><td colspan="6" class="page-loading"><div class="big-spinner"></div><span>Loading verified applications...</span></td></tr>`;
+
+            try {
+                const leaves = await apiRequest('GET', '/warden/leaves', null, getUserId('warden'));
+
+                // Update stat card
+                document.getElementById('statPending').textContent = leaves.length;
+
+                if (leaves.length === 0) {
+                    tbody.innerHTML = `
+                        <tr><td colspan="6">
+                            <div class="empty-state">
+                                <span class="empty-icon">🎉</span>
+                                <p>All applications have been processed. No pending gatepasses.</p>
+                            </div>
+                        </td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = leaves.map(l => `
+                    <tr>
+                        <td>
+                            <strong>${l.stu_name}</strong><br>
+                            <small style="color:#888;">Roll: ${l.roll_no}</small><br>
+                            <small style="color:#888;">Mobile: ${l.stu_mobile}</small>
+                        </td>
+                        <td><strong>${l.room_no}</strong></td>
+                        <td style="white-space:nowrap;">
+                            <i class="fas fa-calendar-alt" style="color:#888; margin-right:4px;"></i>
+                            ${l.departure_date}<br>
+                            <span style="color:#888;">→</span> ${l.arrival_date}
+                        </td>
+                        <td>${l.reason}</td>
+                        <td>
+                            <span class="status-badge badge-approved">
+                                <i class="fas fa-check" style="margin-right:4px;"></i>Parent Verified
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn-issue" onclick="issueGatepass(${l.leave_id}, this)">
+                                <i class="fas fa-passport" style="margin-right:4px;"></i>Issue Gatepass
+                            </button>
+                        </td>
+                    </tr>`).join('');
+
+            } catch (err) {
+                if (err.message.includes('401') || err.message.toLowerCase().includes('unauthorized')) {
+                    logout('warden');
+                }
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#c0392b; padding:20px;">
+                    <i class="fas fa-exclamation-circle"></i> ${err.message || 'Failed to load.'} 
+                    <a href="#" onclick="loadWardenLeaves()">Retry</a>
+                </td></tr>`;
+            }
+        }
+    </script>
 </body>
 </html>

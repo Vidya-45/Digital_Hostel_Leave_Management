@@ -1,23 +1,61 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Login | SNJB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login | SNJB Anumati</title>
+    <meta name="description" content="Student login portal for SNJB's Anumati Hostel Leave Management system.">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="home-bg">
     <header class="header">
-        <div class="logo-area"><span class="brand-name">SNJB</span></div>
+        <div class="logo-area">
+            <span class="nmims-text">SNJB'S</span>
+            <span class="brand-name">ANUMATI Hostel Management</span>
+        </div>
     </header>
+
     <div class="hero-section">
-        <div class="auth-card card" style="background:white; padding:40px; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1); width:350px;">
-            <h2 style="color:var(--nmims-red)">Student Sign In</h2>
-            <form action="student.html">
-                <input type="email" placeholder="Email ID" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd;">
-                <input type="password" placeholder="Password" style="width:100%; padding:10px; margin:10px 0; border:1px solid #ddd;">
-               <button type="submit" class="btn-nmims-submit" style="width:100%; border: none;">Login</button>
+        <div class="auth-card">
+            <h2><i class="fas fa-user-graduate" style="font-size:1.2rem; margin-right:10px; color:var(--maroon);"></i>Student Sign In</h2>
+            <form id="studentLoginForm" autocomplete="off">
+                <div style="margin-bottom: 18px;">
+                    <label for="sEmail">Registered Email ID</label>
+                    <input type="email" id="sEmail" class="input-field" placeholder="student@test.com" required>
+                </div>
+                <div style="margin-bottom: 22px;">
+                    <label for="sPassword">Password</label>
+                    <input type="password" id="sPassword" class="input-field" placeholder="••••••••" required>
+                </div>
+                <p id="loginError" class="error-msg"></p>
+                <button type="submit" id="loginBtn" class="btn-nmims-submit" style="border:none;">Sign In</button>
             </form>
-            <a href="index.html" style="display:block; margin-top:15px; font-size:0.8rem; color:#666;">Back to Selection</a>
+            <a href="index.html" class="auth-back-link">← Back to Role Selection</a>
         </div>
     </div>
+
+    <script src="api.js"></script>
+    <script>
+        document.getElementById('studentLoginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            const email = document.getElementById('sEmail').value.trim();
+            const password = document.getElementById('sPassword').value;
+
+            setError('loginError', '');
+            setButtonLoading(btn, true, 'Sign In');
+
+            try {
+                const data = await apiRequest('POST', '/auth/student/login', { email, password });
+                saveUser('student', data);   // stores user_id, email
+                window.location.href = 'student.html';
+            } catch (err) {
+                setError('loginError', err.message || 'Invalid email or password.');
+                setButtonLoading(btn, false, 'Sign In');
+            }
+        });
+    </script>
 </body>
 </html>
